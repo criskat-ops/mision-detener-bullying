@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <title>Exposición · Derechos Humanos | Bullying y ciberbullying</title>
+  <style>
+    :root {
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --bg-dark: #0f132a;
+      --panel-bg: rgba(29, 36, 71, 0.92);
+      --accent-yellow: #f7cf53;
+      --accent-teal: #92ebf4;
+      --accent-green: #9ef2d0;
+      --border-color: rgba(117, 133, 194, 0.35);
+      --text-light: #f7f7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-main);
+      color: var(--text-light);
+      background: 
+        radial-gradient(circle at 85% 10%, #482272 0%, transparent 42%),
+        radial-gradient(circle at 5% 95%, #135467 0%, transparent 43%),
+        var(--bg-dark);
+    }
+    .shell {
+      max-width: 1120px;
+      min-height: 100vh;
+      margin: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    header.top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 500;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 4px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .logo-img:hover {
+      transform: scale(1.08);
+      border-color: var(--accent-yellow);
+    }
+    .brand {
+      font-size: clamp(16px, 2.2vw, 24px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge, a.btn-nav {
+      font: inherit;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: 100px;
+      cursor: pointer;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: clamp(13px, 1.5vw, 15px);
+      white-space: nowrap;
+      color: white;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    a.btn-nav:hover, button.btn-nav:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.18);
+    }
+    a.btn-game {
+      background: var(--accent-yellow) !important;
+      color: #20213c !important;
+      border-color: var(--accent-yellow) !important;
+      box-shadow: 0 4px 12px rgba(247, 207, 83, 0.3);
+    }
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      border-radius: 28px;
+      margin: auto 0;
+      padding: clamp(24px, 4.4vw, 58px);
+      min-height: 560px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    .kicker {
+      color: var(--accent-teal);
+      font-size: clamp(15px, 1.9vw, 22px);
+      font-weight: 850;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-size: clamp(32px, 5.5vw, 65px);
+      line-height: 1.1;
+      margin: 14px 0 20px;
+      font-weight: 900;
+    }
+    p.lead {
+      font-size: clamp(18px, 2.3vw, 28px);
+      line-height: 1.4;
+      margin: 8px 0 18px;
+      color: #e0e5ff;
+    }
+    ul {
+      font-size: clamp(17px, 2.1vw, 25px);
+      line-height: 1.48;
+      padding-left: 1.3em;
+      margin: 14px 0;
+    }
+    li { margin: 10px 0; }
+    footer.controls {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .btn-control {
+      font: inherit;
+      font-weight: 800;
+      border: 0;
+      border-radius: 16px;
+      cursor: pointer;
+      padding: 15px 26px;
+      font-size: clamp(16px, 2vw, 22px);
+      transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-control:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    }
+    .btn-control.primary {
+      background: var(--accent-yellow);
+      color: #20213c;
+    }
+    .btn-control.secondary {
+      background: #344368;
+      color: white;
+    }
+    .btn-control:disabled {
+      opacity: .4;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+    .note {
+      color: #c9d5f4;
+      font-size: clamp(14px, 1.6vw, 18px);
+      line-height: 1.4;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 14px;
+    }
+    .source {
+      color: var(--accent-green);
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 14px;
+    }
+    .progress {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 100px;
+      margin: 14px 0 0;
+      overflow: hidden;
+    }
+    .progress i {
+      display: block;
+      height: 100%;
+      background: var(--accent-yellow);
+      transition: width .25s ease;
+    }
+    .hint {
+      font-size: 14px;
+      color: #bfc8e1;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* Modal Quiénes Somos */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 14, 35, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+    .modal-content {
+      background: #1d2447;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+      border-radius: 24px;
+      width: min(650px, 92vw);
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px;
+      text-align: left;
+      animation: modalFadeIn 0.25s ease;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    .modal-header h2 {
+      font-size: clamp(20px, 2.4vw, 26px);
+      margin: 0;
+      color: var(--accent-yellow);
+    }
+    .close-btn {
+      background: transparent;
+      border: 0;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.8;
+    }
+    .close-btn:hover { opacity: 1; color: var(--accent-yellow); }
+    .modal-body h3 { color: var(--accent-teal); font-size: clamp(17px, 2vw, 21px); margin: 18px 0 6px; }
+    .modal-body p { font-size: clamp(15px, 1.8vw, 18px); line-height: 1.5; color: #dbe2ff; margin: 0 0 10px; }
+    .credits-box {
+      margin-top: 22px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: center;
+      font-size: 15px;
+      color: var(--accent-green);
+    }
+    .hidden { display: none !important; }
+
+    /* Submenú Dropdown Navbar */
+    .dropdown-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .menu-toggle-btn {
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.15) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .menu-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.25) !important;
+      transform: translateY(-2px);
+    }
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: #171d3a;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+      min-width: 220px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 9000;
+      animation: dropdownFade 0.2s ease;
+    }
+    @keyframes dropdownFade {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .dropdown-item {
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      color: #e0e5ff;
+      background: transparent;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: left;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--accent-yellow);
+    }
+
+    @media (max-width: 768px) {
+      header.top { flex-direction: column; gap: 10px; }
+      .brand-group { width: 100%; justify-content: center; flex-wrap: wrap; }
+      .shell { padding: 12px; }
+      .card { min-height: 0; padding: 22px; }
+      footer.controls button { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <div class="brand-group">
+        <img src="assets/images.jpg" alt="Logo Colegio Luis Boeto" class="logo-img">
+        <div class="brand">🛡️ EXPOSICIÓN · BULLYING Y DERECHOS</div>
+      </div>
+      <div class="brand-group">
+        <a href="index.html" class="badge btn-nav btn-game" title="Ir al juego interactivo">🎮 Ir al juego</a>
+
+        <!-- Submenú de Opciones Navbar -->
+        <div class="dropdown-wrapper">
+          <button id="menubtn" class="badge menu-toggle-btn" title="Menú de opciones">
+            ⚙️ Opciones ▾
+          </button>
+          <div id="dropdownmenu" class="dropdown-menu hidden">
+            <button id="aboutbtn" class="dropdown-item">ℹ️ Sobre Nosotros (Grupo 3)</button>
+            <button id="soundbtn" class="dropdown-item">🔊 Sonido (Activado)</button>
+          </div>
+        </div>
+
+        <img src="assets/logoupds1.png" alt="Logo UPDS" class="logo-img">
+      </div>
+    </header>
+
+    <section class="card" aria-live="polite">
+      <div id="counter" class="kicker"></div>
+      <div id="content"></div>
+      <div class="progress"><i id="bar"></i></div>
+      <footer class="controls">
+        <button id="previous" class="btn-control secondary">← Anterior</button>
+        <span id="number" style="font-weight:750;font-size:16px"></span>
+        <button id="next" class="btn-control primary">Siguiente →</button>
+      </footer>
+    </section>
+
+    <div class="hint">
+      Usa los botones o las teclas ← → para navegar las diapositivas · 100% Offline
+    </div>
+  </main>
+
+  <!-- Modal Sobre la App / Quiénes Somos -->
+  <div id="aboutmodal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>ℹ️ Sobre la Exposición y Quiénes Somos</h2>
+        <button id="closeabout" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="logos-hero" style="display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:16px">
+          <img src="assets/images.jpg" alt="Unidad Educativa Luis Boeto" style="height:60px;width:60px;object-fit:contain;background:#fff;padding:4px;border-radius:14px">
+          <span style="font-size:24px;opacity:0.6">✖</span>
+          <img src="assets/logoupds1.png" alt="Universidad Privada Domingo Savio" style="height:60px;width:60px;object-fit:contain;background:#fff;padding:4px;border-radius:14px">
+        </div>
+        
+        <h3>🛡️ Sobre la Exposición</h3>
+        <p>Esta presentación es parte del proyecto educativo interactivo de prevención del acoso escolar, ciberbullying y defensa de los derechos fundamentales en el ámbito escolar y digital.</p>
+
+        <h3>🎓 Institución & Materia</h3>
+        <p><strong>Universidad Privada Domingo Savio (UPDS)</strong><br>
+        Carrera: <strong>Derecho</strong><br>
+        Materia: <strong>Derechos Humanos</strong><br>
+        Docente: <strong>Lic. Carla Benítez Alarcón</strong></p>
+
+        <h3>👥 Integrantes (Grupo 3)</h3>
+        <ul style="list-style: none; padding: 0; margin: 8px 0 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; font-size: 15px; color: #e0e5ff;">
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Higueras Llanos Cinthia</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Quevedo Fernandez Yanet Silvina</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Padilla Esquivel Nayda Liceth</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Sanchez Altamirano Cristhian</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Sanchez Mamani Juan Carlos</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Tamares Ramirez Najheli</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Torihuano Paise Angelica</li>
+        </ul>
+
+        <div class="credits-box">
+          📍 <strong>Feria Educativa de Derechos Humanos · Sucre, Bolivia</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = [
+      {
+        title: 'Bullying y ciberbullying',
+        lead: '¿Cómo reconocemos el acoso y qué podemos hacer para detenerlo?',
+        items: [
+          'Proyecto de la materia Derechos Humanos · Carrera de Derecho de la Universidad Privada Domingo Savio (UPDS).',
+          'Docente: Lic. Carla Benítez Alarcón · Grupo 3 (Sucre, Bolivia).',
+          'Primero conoceremos el concepto de acoso, los derechos fundamentales (CPE y Ley 548) y las formas de actuar.'
+        ],
+        speaker: 'Presentador: invita a los estudiantes a pensar en cómo puede ayudar un compañero que observa una situación de acoso.'
+      },
+      {
+        title: '¿Qué es el bullying?',
+        lead: 'Es una forma de acoso entre estudiantes que implica hostigamiento o maltrato con desequilibrio de poder.',
+        items: [
+          'Puede manifestarse mediante insultos, amenazas, agresiones o exclusión.',
+          'Suele repetirse o mantenerse en el tiempo.',
+          'Una discusión aislada no basta para afirmar que existe bullying; sin embargo, merece atención si alguien resulta afectado.'
+        ],
+        speaker: 'Presentador: explica que hay que escuchar a la persona afectada y conocer el contexto.'
+      },
+      {
+        title: '¿Qué es el ciberbullying?',
+        lead: 'Es hostigamiento entre pares que ocurre mediante medios digitales.',
+        items: [
+          'Puede aparecer en chats, redes sociales o juegos en línea.',
+          'Ejemplos: mensajes ofensivos, rumores, cuentas falsas e imágenes compartidas para humillar.',
+          'Una publicación puede circular fuera de la escuela y llegar a muchas personas rápidamente.'
+        ],
+        speaker: 'Presentador: recalca que reenviar o celebrar una publicación ofensiva amplifica el daño.'
+      },
+      {
+        title: 'Broma, conflicto o acoso',
+        lead: 'El contexto y el efecto sobre la persona importan.',
+        items: [
+          'Broma: las personas se sienten cómodas y se detiene cuando alguien pide parar.',
+          'Conflicto: un desacuerdo aislado que puede resolverse mediante el diálogo.',
+          'Posible acoso: agresión persistente, daño y dificultad para defenderse o detenerla.'
+        ],
+        speaker: 'Presentador: pregunta qué harían si alguien les dice claramente que un apodo le duele.'
+      },
+      {
+        title: '¿Qué derechos pueden verse afectados?',
+        lead: 'El bullying y el ciberbullying pueden vulnerar varios derechos al mismo tiempo.',
+        items: [
+          'Integridad física y psicológica.',
+          'Dignidad, igualdad y no discriminación.',
+          'Privacidad, intimidad y propia imagen.'
+        ],
+        speaker: 'Presentador: explica que no hacen falta golpes para que una humillación produzca un daño real.'
+      },
+      {
+        title: 'Constitución Política del Estado',
+        lead: 'La Constitución boliviana reconoce derechos fundamentales relevantes frente al acoso.',
+        items: [
+          'Artículo 15: derecho a la vida e integridad física, psicológica y sexual.',
+          'Artículo 21, numeral 2: privacidad, intimidad, honra, propia imagen y dignidad.',
+          'Artículo 22: la dignidad y la libertad de la persona son inviolables.'
+        ],
+        speaker: 'Presentador: relaciona cada derecho con un ejemplo del entorno escolar o digital.',
+        source: 'Fuente: Constitución Política del Estado de Bolivia, arts. 15, 21.2 y 22.'
+      },
+      {
+        title: 'Ley N.º 548',
+        lead: 'El Código Niña, Niño y Adolescente protege a estudiantes frente a la violencia.',
+        items: [
+          'Artículo 142: respeto y dignidad.',
+          'Artículos 143 y 144: privacidad, intimidad, propia imagen y confidencialidad.',
+          'Artículos 150 y 151: protección contra la violencia en el sistema educativo y cibernética.'
+        ],
+        speaker: 'Presentador: explica que la protección requiere la participación activa de la escuela y los adultos.',
+        source: 'Fuente: Ley N.º 548, Código Niña, Niño y Adolescente, arts. 142–144 y 150–151.'
+      },
+      {
+        title: '¿Qué puede hacer un testigo?',
+        lead: 'Observar una situación también ofrece una oportunidad de ayudar.',
+        items: [
+          'No participar en las burlas ni compartir contenido ofensivo.',
+          'Acompañar a la persona afectada sin exponerla delante de todos.',
+          'Buscar apoyo de un docente, familiar u otra persona adulta de confianza.',
+          'Actuar con seguridad; no hace falta enfrentarse solo a un grupo.'
+        ],
+        speaker: 'Presentador: pide al público una acción concreta que un testigo podría realizar.'
+      },
+      {
+        title: 'Si ocurre en Internet',
+        lead: 'La ayuda debe evitar que el contenido ofensivo siga circulando.',
+        items: [
+          'No reenviar mensajes, capturas o imágenes que humillen a alguien.',
+          'Conservar evidencia de manera privada cuando sea necesario.',
+          'Bloquear o reportar cuentas y publicaciones con apoyo de un adulto.',
+          'Contarlo a una persona de confianza; no responder con nuevos insultos.'
+        ],
+        speaker: 'Presentador: recuerda que publicar evidencia públicamente también puede revictimizar.'
+      },
+      {
+        title: 'Ahora te toca decidir',
+        lead: 'Pongamos en práctica lo aprendido en «Misión: Detener el Bullying».',
+        items: [
+          'Reconoce situaciones de acoso.',
+          'Elige qué hacer ante el ciberbullying.',
+          'Protege la dignidad, la privacidad y la integridad de tus compañeros.'
+        ],
+        speaker: 'Presentador: pulsa «🎮 Ir al juego» para iniciar la trivia interactiva.'
+      }
+    ];
+
+    let current = 0;
+    const $ = id => document.getElementById(id);
+
+    // --- Web Audio API Synth Engine (100% Offline) ---
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playTone(freq, type, duration) {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playClickSound() { playTone(480, 'sine', 0.06); }
+    function playSlideSound() { playTone(580, 'sine', 0.08); }
+
+    // --- Submenú Navbar Dropdown ---
+    const menuBtn = $('menubtn');
+    const dropdownMenu = $('dropdownmenu');
+
+    if (menuBtn && dropdownMenu) {
+      menuBtn.onclick = (e) => {
+        e.stopPropagation();
+        playClickSound();
+        dropdownMenu.classList.toggle('hidden');
+      };
+
+      document.addEventListener('click', (e) => {
+        if (!dropdownMenu.contains(e.target) && e.target !== menuBtn) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    const soundBtn = $('soundbtn');
+    if (soundBtn) {
+      soundBtn.onclick = () => {
+        if (dropdownMenu) dropdownMenu.classList.add('hidden');
+        initAudio();
+        soundEnabled = !soundEnabled;
+        soundBtn.textContent = soundEnabled ? '🔊 Sonido' : '🔇 Silencio';
+        soundBtn.style.opacity = soundEnabled ? '1' : '0.55';
+        if (soundEnabled) playClickSound();
+      };
+    }
+
+    // Modal Quiénes Somos
+    const aboutBtn = $('aboutbtn');
+    const aboutModal = $('aboutmodal');
+    const closeAbout = $('closeabout');
+
+    if (aboutBtn && aboutModal && closeAbout) {
+      aboutBtn.onclick = () => {
+        if (dropdownMenu) dropdownMenu.classList.add('hidden');
+        playClickSound();
+        aboutModal.classList.remove('hidden');
+      };
+      closeAbout.onclick = () => { playClickSound(); aboutModal.classList.add('hidden'); };
+      aboutModal.onclick = (e) => { if (e.target === aboutModal) { playClickSound(); aboutModal.classList.add('hidden'); } };
+    }
+
+    function render() {
+      const s = slides[current], root = $('content');
+      root.replaceChildren();
+      $('counter').textContent = 'EXPOSICIÓN · DERECHOS HUMANOS';
+      
+      const h = document.createElement('h1');
+      h.textContent = s.title;
+      root.append(h);
+
+      const p = document.createElement('p');
+      p.className = 'lead';
+      p.textContent = s.lead;
+      root.append(p);
+
+      const ul = document.createElement('ul');
+      s.items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        ul.append(li);
+      });
+      root.append(ul);
+
+      if (s.source) {
+        const cite = document.createElement('div');
+        cite.className = 'source';
+        cite.textContent = s.source;
+        root.append(cite);
+      }
+
+      const note = document.createElement('div');
+      note.className = 'note';
+      note.textContent = s.speaker;
+      root.append(note);
+
+      $('number').textContent = `${current + 1} / ${slides.length}`;
+      $('bar').style.width = `${((current + 1) / slides.length) * 100}%`;
+      $('previous').disabled = current === 0;
+      $('next').textContent = current === slides.length - 1 ? '🎮 Ir al juego' : 'Siguiente →';
+    }
+
+    $('previous').onclick = () => {
+      if (current > 0) {
+        current--;
+        playSlideSound();
+        render();
+      }
+    };
+
+    $('next').onclick = () => {
+      if (current < slides.length - 1) {
+        current++;
+        playSlideSound();
+        render();
+      } else {
+        location.href = 'index.html';
+      }
+    };
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' && current < slides.length - 1) {
+        current++;
+        playSlideSound();
+        render();
+      } else if (e.key === 'ArrowLeft' && current > 0) {
+        current--;
+        playSlideSound();
+        render();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

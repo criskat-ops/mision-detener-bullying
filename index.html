@@ -1,27 +1,1111 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Misión: detener el bullying</title><style>
-:root{font-family:system-ui,Arial,sans-serif;color:#f7f7ff;background:#10142d}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 85% 10%,#482272,transparent 40%),radial-gradient(circle at 5% 95%,#135467,transparent 40%),#10142d}.wrap{width:min(1100px,96vw);min-height:100vh;margin:auto;display:flex;flex-direction:column;padding:20px 20px 12px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:800}.brand{font-size:clamp(17px,2vw,25px)}.badge{padding:10px 17px;border-radius:100px;background:#ffffff18;border:1px solid #ffffff30}.panel{margin:auto 0;background:#1d2447ed;border:1px solid #7585c255;box-shadow:0 24px 80px #0006;border-radius:28px;padding:clamp(22px,4vw,55px);text-align:center}.eyebrow{color:#92ebf4;font-size:clamp(17px,2vw,24px);font-weight:850;text-transform:uppercase;letter-spacing:.06em}h1{font-size:clamp(38px,6.5vw,78px);line-height:1.08;margin:18px 0}h2{font-size:clamp(27px,3.6vw,46px);line-height:1.2;margin:14px 0 30px}.intro{font-size:clamp(20px,2.5vw,30px);line-height:1.45;max-width:800px;margin:22px auto 34px}.button,.choice{font:inherit;cursor:pointer;border:0;border-radius:18px;font-weight:800;transition:transform .12s,background .12s}.button:hover,.choice:hover{transform:translateY(-2px)}.button:focus-visible,.choice:focus-visible{outline:4px solid #f9d861;outline-offset:3px}.button{background:#f7cf53;color:#20213c;padding:18px 30px;font-size:clamp(20px,2.4vw,29px)}.button.secondary{background:#324164;color:white}.choices{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left}.choice{background:#303a67;color:#fff;border:2px solid #8d9ac260;min-height:78px;padding:16px 20px;font-size:clamp(17px,2vw,25px);text-align:left}.choice span{display:inline-grid;place-items:center;background:#ffffff22;border-radius:10px;min-width:37px;height:37px;margin-right:10px}.choice:disabled{cursor:default;transform:none}.choice.correct{background:#176b58;border-color:#70e1b9}.choice.wrong{background:#813c59;border-color:#ff96aa}.choice.dim{opacity:.55}.bar{height:12px;background:#ffffff2b;border-radius:20px;overflow:hidden;margin:0 0 28px}.bar i{display:block;height:100%;background:#f7cf53;transition:width .3s}.feedback{margin:24px 0;padding:20px;border-radius:18px;background:#ffffff16;text-align:left;font-size:clamp(19px,2.15vw,27px);line-height:1.4}.feedback strong{display:block;color:#9ef2d0}.foot{font-size:15px;color:#d0d7f2;text-align:center;margin-top:12px}.small{font-size:18px;color:#d0d7f2}.score{font-size:clamp(60px,9vw,110px);font-weight:900;color:#f7cf53;margin:0}.hidden{display:none}.status{display:flex;justify-content:space-between;gap:15px;font-size:clamp(16px,2vw,22px);font-weight:750;margin-bottom:13px}@media(max-width:700px){.choices{grid-template-columns:1fr}.wrap{padding:12px}.panel{padding:20px}.top{font-size:13px}.choice{min-height:62px}}
-</style></head><body><main class="wrap"><header class="top"><div class="brand">🛡️ MISIÓN: DETENER EL BULLYING</div><div id="scoretop" class="badge">Feria educativa · Sucre</div></header><section id="home" class="panel"><div class="eyebrow">Unidad Educativa Luis Boeto · Grupo 3</div><h1>¡Tu misión empieza aquí!</h1><p class="intro">Resuelve 8 situaciones en 4 misiones. Elige cómo reconocer el acoso, actuar en Internet y proteger los derechos de tus compañeros.</p><button id="start" class="button">▶ INICIAR MISIÓN</button><p class="small">Duración aproximada: 3–5 minutos · Funciona sin Internet</p></section><section id="game" class="panel hidden"><div class="status"><span id="stage"></span><span id="count"></span></div><div class="bar"><i id="progress"></i></div><h2 id="question"></h2><div id="choices" class="choices"></div><div id="feedback" class="feedback hidden" role="status"></div><button id="next" class="button hidden" style="margin-top:10px">SIGUIENTE ➜</button></section><section id="end" class="panel hidden"><div class="eyebrow">Misión terminada</div><h1 id="rank"></h1><p id="score" class="score"></p><p id="closing" class="intro"></p><p class="intro" style="color:#9ef2d0;font-weight:850">No participes · No compartas · Acompaña · Pide ayuda</p><button id="again" class="button">🔄 NUEVA MISIÓN</button></section><footer class="foot">Actividad educativa de prevención · No es una evaluación psicológica ni identifica casos individuales.</footer></main><script>
-const bank=[
-{cat:'🔎 DETECTIVE',q:'Carlos y Mateo discuten una vez durante un partido. ¿Es bullying?',a:['Sí, toda discusión lo es','No necesariamente: fue una discusión aislada','Sí, porque alguien se enojó'],ok:1,why:'Una discusión aislada no basta para identificar bullying. Hay que conocer el contexto.'},
-{cat:'🔎 DETECTIVE',q:'Todos los recreos esconden la mochila de Andrés y lo insultan aunque pidió que paren. ¿Qué observas?',a:['Una broma divertida','Un conflicto sin importancia','Una posible situación de bullying'],ok:2,why:'La agresión se repite, causa daño y Andrés no logra detenerla.'},
-{cat:'🔎 DETECTIVE',q:'Dos amigas se hacen una broma, ambas se ríen y ninguna se siente incómoda. ¿Qué corresponde?',a:['Es bullying siempre','Es una broma consentida, mientras ambas estén cómodas','Hay que expulsarlas'],ok:1,why:'Escucha cómo se siente cada persona. Si alguien pide parar, hay que respetarlo.'},
-{cat:'🔎 DETECTIVE',q:'Cada semana dejan fuera del grupo de trabajo al mismo compañero y se burlan cuando pide participar. ¿Qué indica?',a:['Posible acoso y exclusión reiterada','Una forma normal de organizarse','Una prueba de amistad'],ok:0,why:'La exclusión repetida y la burla requieren atención de un adulto responsable.'},
-{cat:'🔎 DETECTIVE',q:'Una estudiante dice que un compañero la empujó. No sabemos qué ocurrió antes ni si se repitió. ¿Qué haces?',a:['Decir que seguro es bullying','Ignorarla porque pasó una sola vez','Escucharla, buscar ayuda y conocer el contexto'],ok:2,why:'Un hecho aislado también puede requerir intervención, aunque no se clasifique como bullying.'},
-{cat:'📱 ALERTA DIGITAL',q:'En el chat comparten un meme para humillar a una compañera. ¿Qué haces?',a:['Lo reenvío a otro chat','No lo comparto, la apoyo y busco ayuda','Le pongo un emoji de risa'],ok:1,why:'Reenviar o celebrar la burla amplifica el daño. Apoyar y pedir ayuda puede detenerlo.'},
-{cat:'📱 ALERTA DIGITAL',q:'Un compañero recibe mensajes ofensivos repetidamente y tiene miedo de contarlo. ¿Qué haces?',a:['Lo acompaño para pedir ayuda a un adulto de confianza','Publico capturas con su nombre','Le digo que responda con insultos'],ok:0,why:'Escúchalo y acompáñalo. Conserven evidencia sin difundirla públicamente.'},
-{cat:'📱 ALERTA DIGITAL',q:'Alguien crea una cuenta falsa para ridiculizar a un estudiante. ¿Qué acción ayuda?',a:['Seguir la cuenta para vigilarla','Comentar para que el autor se enoje','No interactuar, guardar evidencia y reportarla con apoyo adulto'],ok:2,why:'No des más difusión a la cuenta. Buscar apoyo facilita que se atienda el caso.'},
-{cat:'📱 ALERTA DIGITAL',q:'Comparten una foto privada de una compañera sin su permiso. ¿Qué haces?',a:['La borro de mi chat, no la reenvío y aviso a un adulto','La comparto solo con mis amigos','La publico para denunciar al responsable'],ok:0,why:'Evita difundir la imagen; un adulto puede ayudar a reportarla y proteger a la compañera.'},
-{cat:'📱 ALERTA DIGITAL',q:'Expulsan repetidamente a un compañero del grupo digital del curso para humillarlo. ¿Qué puede ser?',a:['Nada: Internet no cuenta','Una forma de ciberbullying','Una norma obligatoria de grupo'],ok:1,why:'La exclusión intencional y reiterada en espacios digitales también puede causar daño.'},
-{cat:'🎯 TÚ DECIDES',q:'Se burlan de un estudiante nuevo por su forma de hablar. ¿Qué haces?',a:['Me uno para no quedar fuera','Me quedo mirando sin actuar','No apoyo la burla, lo acompaño y busco ayuda'],ok:2,why:'Acompañar a quien recibe burlas y pedir ayuda es una manera segura de intervenir.'},
-{cat:'🎯 TÚ DECIDES',q:'Tu mejor amigo insulta repetidamente a otro estudiante. ¿Qué haces?',a:['Le digo que pare y, si continúa, busco apoyo adulto','Lo defiendo porque es mi amigo','Le digo al otro que aguante'],ok:0,why:'La amistad también implica poner límites cuando alguien hace daño.'},
-{cat:'🎯 TÚ DECIDES',q:'Ves una burla grupal y te preocupa que se vuelvan contra ti. ¿Qué puedes hacer?',a:['Enfrentarte solo al grupo','Buscar a un docente y acompañar al compañero después','Grabar y publicar el momento'],ok:1,why:'Puedes intervenir de forma segura sin exponerte a una confrontación.'},
-{cat:'🎯 TÚ DECIDES',q:'Una compañera te cuenta que teme ir a clases por burlas constantes. ¿Qué respuesta ayuda?',a:['Decirle que no exagere','Prometer que jamás contarás nada','Escucharla sin juzgar y acompañarla a pedir ayuda'],ok:2,why:'Tomar en serio lo que siente y buscar apoyo es importante.'},
-{cat:'🎯 TÚ DECIDES',q:'Un compañero pide que dejen de llamarlo por un apodo que le duele. ¿Qué haces?',a:['Respetar su pedido y pedir a otros que paren','Seguir porque el apodo es gracioso','Cambiarlo por otro apodo'],ok:0,why:'El límite que expresa la persona debe respetarse.'},
-{cat:'⚖️ TUS DERECHOS',q:'Publican una foto de una estudiante sin permiso para humillarla. ¿Qué derechos pueden afectarse?',a:['Ninguno porque fue en Internet','Privacidad, propia imagen y dignidad','Solo el derecho a jugar'],ok:1,why:'La privacidad, la imagen y la dignidad también se protegen en espacios digitales.'},
-{cat:'⚖️ TUS DERECHOS',q:'Humillan repetidamente a un estudiante por la situación económica de su familia. ¿Qué principio debemos proteger?',a:['Igualdad y no discriminación','El derecho del grupo a burlarse','Ninguno si no hay golpes'],ok:0,why:'Todas las personas merecen respeto e igualdad, sin importar su situación económica.'},
-{cat:'⚖️ TUS DERECHOS',q:'Amenazan y hostigan a una estudiante dentro y fuera del aula. ¿Qué debe protegerse?',a:['Solo sus notas','Solo su teléfono','Su integridad y derecho a vivir sin violencia'],ok:2,why:'La violencia psicológica y las amenazas afectan la integridad y la seguridad.'},
-{cat:'⚖️ TUS DERECHOS',q:'Un grupo divulga mensajes personales de un compañero para avergonzarlo. ¿Qué derecho es especialmente relevante?',a:['La privacidad e intimidad','El derecho a reenviar mensajes','Ninguno si el chat era privado'],ok:0,why:'Los mensajes personales no deben difundirse para causar daño.'},
-{cat:'⚖️ TUS DERECHOS',q:'Una compañera sufre burlas constantes y quiere contarlo. ¿Quién puede ayudar a proteger sus derechos?',a:['Solo sus amistades','Docentes, familia y personas adultas responsables de la escuela','Nadie si ocurre por redes'],ok:1,why:'La escuela y los adultos responsables deben escuchar, proteger y activar los canales de ayuda.'}
-];
-let round=[],index=0,points=0,answered=false;const $=id=>document.getElementById(id);function show(id){['home','game','end'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}function begin(){round=['🔎 DETECTIVE','📱 ALERTA DIGITAL','🎯 TÚ DECIDES','⚖️ TUS DERECHOS'].flatMap(c=>shuffle(bank.filter(x=>x.cat===c)).slice(0,2));index=0;points=0;$('scoretop').textContent='⭐ 0 / 800';show('game');render()}function render(){answered=false;let q=round[index];$('stage').textContent=q.cat;$('count').textContent=`Pregunta ${index+1} / 8`;$('progress').style.width=(index/8*100)+'%';$('question').textContent=q.q;$('feedback').classList.add('hidden');$('next').classList.add('hidden');let box=$('choices');box.replaceChildren();q.a.forEach((v,i)=>{let b=document.createElement('button');b.className='choice';let label=document.createElement('span');label.textContent='ABC'[i];b.append(label,document.createTextNode(v));b.onclick=()=>answer(i);box.append(b)})}function answer(i){if(answered)return;answered=true;let q=round[index],right=i===q.ok;if(right)points+=100;$('scoretop').textContent=`⭐ ${points} / 800`;[...$('choices').children].forEach((b,j)=>{b.disabled=true;b.classList.add(j===q.ok?'correct':j===i?'wrong':'dim')});let f=$('feedback');f.replaceChildren();let strong=document.createElement('strong');strong.textContent=right?'✅ ¡Bien! +100 puntos':'💡 Aprendamos juntos';f.append(strong,document.createTextNode(q.why));f.classList.remove('hidden');$('progress').style.width=((index+1)/8*100)+'%';$('next').textContent=index===7?'VER RESULTADO 🏆':'SIGUIENTE ➜';$('next').classList.remove('hidden')}function advance(){if(!answered)return;if(++index<8){render();return}show('end');$('score').textContent=points+' / 800';let rank=points>=700?'🏆 GUARDIÁN CONTRA EL BULLYING':points>=400?'🛡️ DEFENSOR':'🌱 APRENDIZ';$('rank').textContent=rank;$('closing').textContent=points>=700?'¡Misión cumplida! Puedes reconocer situaciones de acoso y actuar con respeto.':points>=400?'¡Buen trabajo! Sigue practicando cómo reconocer el acoso y acompañar a otros.':'Cada decisión es una oportunidad para aprender y ayudar. ¡Vuelve a intentarlo!'}$('start').onclick=begin;$('again').onclick=begin;$('next').onclick=advance;document.addEventListener('keydown',e=>{if($('game').classList.contains('hidden'))return;if(!answered&&['1','2','3','a','b','c'].includes(e.key.toLowerCase())){let map={a:0,b:1,c:2,'1':0,'2':1,'3':2};answer(map[e.key.toLowerCase()])}else if(answered&&e.key==='Enter')advance()});
-</script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <title>Misión: detener el bullying · U.E. Luis Boeto & UPDS</title>
+  <style>
+    :root {
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --bg-dark: #0f132a;
+      --panel-bg: rgba(29, 36, 71, 0.92);
+      --accent-yellow: #f7cf53;
+      --accent-teal: #92ebf4;
+      --accent-green: #9ef2d0;
+      --border-color: rgba(117, 133, 194, 0.35);
+      --text-light: #f7f7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-main);
+      color: var(--text-light);
+      background: 
+        radial-gradient(circle at 85% 10%, #482272 0%, transparent 40%),
+        radial-gradient(circle at 5% 95%, #135467 0%, transparent 40%),
+        var(--bg-dark);
+    }
+    .wrap {
+      width: min(1100px, 96vw);
+      min-height: 100vh;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 20px 12px;
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 500;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-img {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 4px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .logo-img:hover {
+      transform: scale(1.08);
+      border-color: var(--accent-yellow);
+    }
+    .brand {
+      font-size: clamp(16px, 2.2vw, 24px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      padding: 8px 16px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: clamp(13px, 1.5vw, 15px);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .panel {
+      margin: auto 0;
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      border-radius: 28px;
+      padding: clamp(22px, 4vw, 50px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .logos-hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+    .logo-hero-img {
+      height: 80px;
+      width: 80px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 6px;
+      border-radius: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .logo-hero-img:hover {
+      transform: scale(1.1) rotate(2deg);
+    }
+    .logos-divider {
+      font-size: 24px;
+      opacity: 0.6;
+      font-weight: 300;
+    }
+    .eyebrow {
+      color: var(--accent-teal);
+      font-size: clamp(15px, 1.9vw, 22px);
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    h1 {
+      font-size: clamp(34px, 6vw, 72px);
+      line-height: 1.08;
+      margin: 16px 0;
+      font-weight: 900;
+    }
+    h2 {
+      font-size: clamp(24px, 3.4vw, 42px);
+      line-height: 1.2;
+      margin: 14px 0 26px;
+    }
+    .intro {
+      font-size: clamp(18px, 2.3vw, 28px);
+      line-height: 1.45;
+      max-width: 800px;
+      margin: 20px auto 30px;
+      color: #e0e5ff;
+    }
+    .button, .choice {
+      font: inherit;
+      cursor: pointer;
+      border: 0;
+      border-radius: 18px;
+      font-weight: 800;
+      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+    }
+    .button:hover, .choice:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .button:focus-visible, .choice:focus-visible {
+      outline: 4px solid var(--accent-yellow);
+      outline-offset: 3px;
+    }
+    .button {
+      background: var(--accent-yellow);
+      color: #20213c;
+      padding: 18px 34px;
+      font-size: clamp(19px, 2.3vw, 28px);
+      box-shadow: 0 4px 15px rgba(247, 207, 83, 0.3);
+    }
+    .button.secondary {
+      background: #324164;
+      color: white;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      text-align: left;
+    }
+    .choice {
+      background: #303a67;
+      color: #fff;
+      border: 2px solid rgba(141, 154, 194, 0.38);
+      min-height: 78px;
+      padding: 16px 20px;
+      font-size: clamp(16px, 1.9vw, 24px);
+      text-align: left;
+    }
+    .choice span {
+      display: inline-grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      min-width: 37px;
+      height: 37px;
+      margin-right: 10px;
+      font-weight: 800;
+    }
+    .choice:disabled {
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+    .choice.correct {
+      background: #176b58;
+      border-color: #70e1b9;
+    }
+    .choice.wrong {
+      background: #813c59;
+      border-color: #ff96aa;
+    }
+    .choice.dim {
+      opacity: .55;
+    }
+    .bar {
+      height: 12px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 0 0 26px;
+    }
+    .bar i {
+      display: block;
+      height: 100%;
+      background: var(--accent-yellow);
+      transition: width .3s ease;
+    }
+    .feedback {
+      margin: 24px 0;
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      text-align: left;
+      font-size: clamp(18px, 2vw, 26px);
+      line-height: 1.4;
+    }
+    .feedback strong {
+      display: block;
+      color: var(--accent-green);
+      margin-bottom: 6px;
+    }
+    .foot {
+      font-size: 14px;
+      color: #b5c0e8;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .small {
+      font-size: 17px;
+      color: #b5c0e8;
+      margin-top: 14px;
+    }
+    .score {
+      font-size: clamp(56px, 8.5vw, 105px);
+      font-weight: 900;
+      color: var(--accent-yellow);
+      margin: 0;
+      text-shadow: 0 4px 20px rgba(247, 207, 83, 0.25);
+    }
+    .hidden { display: none !important; }
+    .status {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      font-size: clamp(15px, 1.9vw, 21px);
+      font-weight: 750;
+      margin-bottom: 13px;
+    }
+    @media (max-width: 768px) {
+      .top {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand-group {
+        width: 100%;
+        justify-content: center;
+      }
+      .choices { grid-template-columns: 1fr; }
+      .wrap { padding: 12px; }
+      .panel { padding: 20px; }
+      .choice { min-height: 62px; }
+      .logo-hero-img { height: 64px; width: 64px; }
+    }
+
+    /* Modal Quiénes Somos & Sobre la App */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 14, 35, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+    .modal-content {
+      background: #1d2447;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+      border-radius: 24px;
+      width: min(650px, 92vw);
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px;
+      text-align: left;
+      animation: modalFadeIn 0.25s ease;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    .modal-header h2 {
+      font-size: clamp(20px, 2.4vw, 26px);
+      margin: 0;
+      color: var(--accent-yellow);
+    }
+    .close-btn {
+      background: transparent;
+      border: 0;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity 0.15s ease;
+    }
+    .close-btn:hover {
+      opacity: 1;
+      color: var(--accent-yellow);
+    }
+    .modal-body h3 {
+      color: var(--accent-teal);
+      font-size: clamp(17px, 2vw, 21px);
+      margin: 18px 0 6px;
+    }
+    .modal-body p {
+      font-size: clamp(15px, 1.8vw, 18px);
+      line-height: 1.5;
+      color: #dbe2ff;
+      margin: 0 0 10px;
+    }
+    .credits-box {
+      margin-top: 22px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: center;
+      font-size: 15px;
+      color: var(--accent-green);
+    }
+
+    /* Pestaña flotante lateral derecha para selección de modo */
+    .floating-mode-tab {
+      position: fixed;
+      right: 0;
+      top: 48%;
+      transform: translateY(-50%);
+      z-index: 1000;
+      background: rgba(23, 29, 58, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-right: none;
+      border-radius: 18px 0 0 18px;
+      padding: 12px 14px;
+      box-shadow: -6px 10px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .floating-mode-tab h4 {
+      margin: 0 0 4px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent-teal);
+      text-align: center;
+    }
+    .mode-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+      white-space: nowrap;
+    }
+    .mode-btn:hover {
+      transform: translateX(-3px);
+    }
+    .mode-btn.active {
+      background: var(--accent-yellow);
+      color: #20213c;
+      border-color: var(--accent-yellow);
+      box-shadow: 0 4px 12px rgba(247, 207, 83, 0.3);
+    }
+    @media (max-width: 768px) {
+      .floating-mode-tab {
+        top: auto;
+        bottom: 20px;
+        right: 12px;
+        left: 12px;
+        transform: none;
+        border-radius: 18px;
+        border-right: 1px solid var(--border-color);
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+      }
+      .floating-mode-tab h4 { display: none; }
+    }
+
+    /* Submenú Dropdown Navbar */
+    .dropdown-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .menu-toggle-btn {
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.15) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .menu-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.25) !important;
+      transform: translateY(-2px);
+    }
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: #171d3a;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+      min-width: 220px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 9000;
+      animation: dropdownFade 0.2s ease;
+    }
+    @keyframes dropdownFade {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .dropdown-item {
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      color: #e0e5ff;
+      background: transparent;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: left;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--accent-yellow);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999"></canvas>
+  
+  <!-- Pestaña Flotante Derecha de Selección de Modo -->
+  <aside id="floatingmodetab" class="floating-mode-tab" title="Duración de la Misión">
+    <h4>⚡ Misión</h4>
+    <button id="btnmode8" class="mode-btn active" title="Misión Completa (8 Preguntas)">🛡️ 8 Preguntas</button>
+    <button id="btnmode4" class="mode-btn" title="Modo Express Rápido (4 Preguntas)">⚡ 4 Preguntas</button>
+  </aside>
+
+  <main class="wrap">
+    <header class="top">
+      <div class="brand-group">
+        <img src="assets/images.jpg" alt="Logo Colegio Luis Boeto" class="logo-img">
+        <div class="brand">🛡️ MISIÓN: DETENER EL BULLYING</div>
+      </div>
+      <div class="brand-group">
+        <div id="scoretop" class="badge">⭐ 0 / 800</div>
+
+        <!-- Submenú de Opciones Navbar -->
+        <div class="dropdown-wrapper">
+          <button id="menubtn" class="badge menu-toggle-btn" title="Menú de opciones">
+            ⚙️ Opciones ▾
+          </button>
+          <div id="dropdownmenu" class="dropdown-menu hidden">
+            <a href="exposicion.html" class="dropdown-item">📊 Exposición (Diapositivas)</a>
+            <button id="aboutbtn" class="dropdown-item">ℹ️ Sobre Nosotros (Grupo 3)</button>
+            <button id="soundbtn" class="dropdown-item">🔊 Sonido (Activado)</button>
+          </div>
+        </div>
+
+        <img src="assets/logoupds1.png" alt="Logo UPDS" class="logo-img">
+      </div>
+    </header>
+
+    <section id="home" class="panel">
+      <div class="logos-hero">
+        <img src="assets/images.jpg" alt="Unidad Educativa Luis Boeto" class="logo-hero-img" title="Unidad Educativa Luis Boeto">
+        <span class="logos-divider">✖</span>
+        <img src="assets/logoupds1.png" alt="Universidad Privada Domingo Savio (UPDS)" class="logo-hero-img" title="Universidad Privada Domingo Savio">
+      </div>
+      <div class="eyebrow">Carrera de Derecho · UPDS | Materia: Derechos Humanos</div>
+      <h1>¡Tu misión empieza aquí!</h1>
+      <p class="intro">Resuelve 8 situaciones en 4 misiones. Elige cómo reconocer el acoso, actuar en Internet y proteger los derechos de tus compañeros.</p>
+      <div style="margin: 16px 0 24px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <label style="cursor: pointer; font-size: clamp(16px, 1.8vw, 20px); font-weight: 700; display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.08); padding: 10px 22px; border-radius: 100px; border: 1px solid rgba(255, 255, 255, 0.2);">
+          <input type="checkbox" id="timertoggle" style="width: 20px; height: 20px; accent-color: var(--accent-yellow); cursor: pointer;">
+          ⏱️ Activar Modo Contrarreloj (15 seg)
+        </label>
+      </div>
+      <button id="start" class="button">▶ INICIAR MISIÓN</button>
+      <p class="small">Grupo 3 · Docente: Lic. Carla Benítez Alarcón · Sucre, Bolivia</p>
+    </section>
+
+    <section id="game" class="panel hidden">
+      <div class="status">
+        <span id="stage"></span>
+        <span id="timerbadge" class="hidden" style="color: var(--accent-yellow); font-weight: 850;">⏱️ 15s</span>
+        <span id="count"></span>
+      </div>
+      <div class="bar"><i id="progress"></i></div>
+      <h2 id="question"></h2>
+      <div id="choices" class="choices"></div>
+      <div id="feedback" class="feedback hidden" role="status"></div>
+      <button id="next" class="button hidden" style="margin-top:14px">SIGUIENTE ➜</button>
+    </section>
+
+    <section id="end" class="panel hidden">
+      <div class="logos-hero" style="margin-bottom:10px">
+        <img src="assets/images.jpg" alt="Unidad Educativa Luis Boeto" class="logo-hero-img" style="height:55px;width:55px">
+        <span class="logos-divider">✖</span>
+        <img src="assets/logoupds1.png" alt="Universidad Privada Domingo Savio (UPDS)" class="logo-hero-img" style="height:55px;width:55px">
+      </div>
+      <div class="eyebrow">Misión terminada</div>
+      <h1 id="rank"></h1>
+      <p id="score" class="score"></p>
+      <p id="closing" class="intro"></p>
+      <p class="intro" style="color:var(--accent-green);font-weight:850">No participes · No compartas · Acompaña · Pide ayuda</p>
+      <button id="again" class="button">🔄 NUEVA MISIÓN</button>
+    </section>
+
+    <footer class="foot">
+      Actividad Educativa de Prevención · Carrera de Derecho (UPDS) · Materia: Derechos Humanos · Sucre, Bolivia
+    </footer>
+  </main>
+
+  <!-- Modal Sobre la App / Quiénes Somos -->
+  <div id="aboutmodal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>ℹ️ Sobre la App y Quiénes Somos</h2>
+        <button id="closeabout" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="logos-hero" style="margin-bottom:16px">
+          <img src="assets/images.jpg" alt="Unidad Educativa Luis Boeto" class="logo-hero-img" style="height:60px;width:60px">
+          <span class="logos-divider">✖</span>
+          <img src="assets/logoupds1.png" alt="Universidad Privada Domingo Savio (UPDS)" class="logo-hero-img" style="height:60px;width:60px">
+        </div>
+        
+        <h3>🛡️ Sobre la Aplicación</h3>
+        <p><strong>"Misión: detener el bullying"</strong> es una plataforma interactiva de concientización y aprendizaje desarrollada para promover la cultura de paz, el respeto y la prevención del acoso escolar y ciberbullying.</p>
+
+        <h3>🎓 Institución & Materia</h3>
+        <p><strong>Universidad Privada Domingo Savio (UPDS)</strong><br>
+        Carrera: <strong>Derecho</strong><br>
+        Materia: <strong>Derechos Humanos</strong><br>
+        Docente: <strong>Lic. Carla Benítez Alarcón</strong></p>
+
+        <h3>👥 Integrantes (Grupo 3)</h3>
+        <ul style="list-style: none; padding: 0; margin: 8px 0 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; font-size: 15px; color: #e0e5ff;">
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Higueras Llanos Cinthia</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Quevedo Fernandez Yanet Silvina</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Padilla Esquivel Nayda Liceth</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Sanchez Altamirano Cristhian</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Sanchez Mamani Juan Carlos</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Tamares Ramirez Najheli</li>
+          <li style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">👤 Torihuano Paise Angelica</li>
+        </ul>
+
+        <div class="credits-box">
+          📍 <strong>Feria Educativa de Derechos Humanos · Sucre, Bolivia</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const bank = [
+      {cat:'🔎 DETECTIVE',q:'Carlos y Mateo discuten una vez durante un partido. ¿Es bullying?',a:['Sí, toda discusión lo es','No necesariamente: fue una discusión aislada','Sí, porque alguien se enojó'],ok:1,why:'Una discusión aislada no basta para identificar bullying. Hay que conocer el contexto.'},
+      {cat:'🔎 DETECTIVE',q:'Todos los recreos esconden la mochila de Andrés y lo insultan aunque pidió que paren. ¿Qué observas?',a:['Una broma divertida','Un conflicto sin importancia','Una posible situación de bullying'],ok:2,why:'La agresión se repite, causa daño y Andrés no logra detenerla.'},
+      {cat:'🔎 DETECTIVE',q:'Dos amigas se hacen una broma, ambas se ríen y ninguna se siente incómoda. ¿Qué corresponde?',a:['Es bullying siempre','Es una broma consentida, mientras ambas estén cómodas','Hay que expulsarlas'],ok:1,why:'Escucha cómo se siente cada persona. Si alguien pide parar, hay que respetarlo.'},
+      {cat:'🔎 DETECTIVE',q:'Cada semana dejan fuera del grupo de trabajo al mismo compañero y se burlan cuando pide participar. ¿Qué indica?',a:['Posible acoso y exclusión reiterada','Una forma normal de organizarse','Una prueba de amistad'],ok:0,why:'La exclusión repetida y la burla requieren atención de un adulto responsable.'},
+      {cat:'🔎 DETECTIVE',q:'Una estudiante dice que un compañero la empujó. No sabemos qué ocurrió antes ni si se repitió. ¿Qué haces?',a:['Decir que seguro es bullying','Ignorarla porque pasó una sola vez','Escucharla, buscar ayuda y conocer el contexto'],ok:2,why:'Un hecho aislado también puede requerir intervención, aunque no se clasifique como bullying.'},
+      {cat:'🔎 DETECTIVE',q:'Un estudiante tropieza y otros se ríen una vez. ¿Podemos afirmar que es bullying?',a:['Sí, cualquier risa es bullying','No con esa información; debemos escuchar qué ocurrió','No importa cómo se sintió'],ok:1,why:'Para comprender la situación hay que escuchar a la persona afectada y conocer el contexto.'},
+      {cat:'🔎 DETECTIVE',q:'Un grupo amenaza cada día a un compañero para que les entregue su merienda. ¿Qué observas?',a:['Una posible situación de bullying que requiere ayuda','Una broma entre compañeros','Un intercambio voluntario'],ok:0,why:'Las amenazas repetidas y la presión sobre un compañero requieren intervención de adultos responsables.'},
+      {cat:'🔎 DETECTIVE',q:'Dos estudiantes tienen una discusión y después acuerdan cómo resolverla. ¿Qué indica?',a:['Que necesariamente hubo bullying','Que nunca se debe hablar de conflictos','Que fue un conflicto que pudieron resolver dialogando'],ok:2,why:'Un desacuerdo aislado puede resolverse mediante el diálogo; no todo conflicto es bullying.'},
+
+      {cat:'📱 ALERTA DIGITAL',q:'En el chat comparten un meme para humillar a una compañera. ¿Qué haces?',a:['Lo reenvío a otro chat','No lo comparto, la apoyo y busco ayuda','Le pongo un emoji de risa'],ok:1,why:'Reenviar o celebrar la burla amplifica el daño. Apoyar y pedir ayuda puede detenerlo.'},
+      {cat:'📱 ALERTA DIGITAL',q:'Un compañero recibe mensajes ofensivos repetidamente y tiene miedo de contarlo. ¿Qué haces?',a:['Lo acompaño para pedir ayuda a un adulto de confianza','Publico capturas con su nombre','Le digo que responda con insultos'],ok:0,why:'Escúchalo y acompáñalo. Conserven evidencia sin difundirla públicamente.'},
+      {cat:'📱 ALERTA DIGITAL',q:'Alguien crea una cuenta falsa para ridiculizar a un estudiante. ¿Qué acción ayuda?',a:['Seguir la cuenta para vigilarla','Comentar para que el autor se enoje','No interactuar, guardar evidencia y reportarla con apoyo adulto'],ok:2,why:'No des más difusión a la cuenta. Buscar apoyo facilita que se atienda el caso.'},
+      {cat:'📱 ALERTA DIGITAL',q:'Comparten una foto privada de una compañera sin su permiso. ¿Qué haces?',a:['La borro de mi chat, no la reenvío y aviso a un adulto','La comparto solo con mis amigos','La publico para denunciar al responsable'],ok:0,why:'Evita difundir la imagen; un adulto puede ayudar a reportarla y proteger a la compañera.'},
+      {cat:'📱 ALERTA DIGITAL',q:'Expulsan repetidamente a un compañero del grupo digital del curso para humillarlo. ¿Qué puede ser?',a:['Nada: Internet no cuenta','Una forma de ciberbullying','Una norma obligatoria de grupo'],ok:1,why:'La exclusión intencional y reiterada en espacios digitales también puede causar daño.'},
+      {cat:'📱 ALERTA DIGITAL',q:'Te agregan a un grupo creado para burlarse de un compañero. ¿Qué haces?',a:['Invito a más personas','No participo, salgo del grupo y busco apoyo adulto','Me quedo y envío emojis'],ok:1,why:'No participar ni ampliar el público ayuda a frenar la humillación.'},
+      {cat:'📱 ALERTA DIGITAL',q:'Recibes una captura de pantalla con un rumor dañino sobre una estudiante. ¿Qué haces?',a:['La reenvío para preguntar si es verdad','La publico con una advertencia','No la difundo y aviso si la situación puede causarle daño'],ok:2,why:'Difundir rumores puede aumentar el daño, incluso si dices que solo quieres comprobarlos.'},
+      {cat:'📱 ALERTA DIGITAL',q:'Un estudiante bloquea a otro después de recibir mensajes ofensivos. ¿Qué más puede ayudar?',a:['Guardar evidencia y contarlo a un adulto de confianza','Crear otra cuenta para insultar de vuelta','Publicar los mensajes privados de ambos'],ok:0,why:'Bloquear puede detener el contacto, y pedir ayuda permite atender lo ocurrido.'},
+
+      {cat:'🎯 TÚ DECIDES',q:'Se burlan de un estudiante nuevo por su forma de hablar. ¿Qué haces?',a:['Me uno para no quedar fuera','Me quedo mirando sin actuar','No apoyo la burla, lo acompaño y busco ayuda'],ok:2,why:'Acompañar a quien recibe burlas y pedir ayuda es una manera segura de intervenir.'},
+      {cat:'🎯 TÚ DECIDES',q:'Tu mejor amigo insulta repetidamente a otro estudiante. ¿Qué haces?',a:['Le digo que pare y, si continúa, busco apoyo adulto','Lo defiendo porque es mi amigo','Le digo al otro que aguante'],ok:0,why:'La amistad también implica poner límites cuando alguien hace daño.'},
+      {cat:'🎯 TÚ DECIDES',q:'Ves una burla grupal y te preocupa que se vuelvan contra ti. ¿Qué puedes hacer?',a:['Enfrentarte solo al grupo','Buscar a un docente y acompañar al compañero después','Grabar y publicar el momento'],ok:1,why:'Puedes intervenir de forma segura sin exponerte a una confrontación.'},
+      {cat:'🎯 TÚ DECIDES',q:'Una compañera te cuenta que teme ir a clases por burlas constantes. ¿Qué respuesta ayuda?',a:['Decirle que no exagere','Prometer que jamás contarás nada','Escucharla sin juzgar y acompañarla a pedir ayuda'],ok:2,why:'Tomar en serio lo que siente y buscar apoyo es importante.'},
+      {cat:'🎯 TÚ DECIDES',q:'Un compañero pide que dejen de llamarlo por un apodo que le duele. ¿Qué haces?',a:['Respetar su pedido y pedir a otros que paren','Seguir porque el apodo es gracioso','Cambiarlo por otro apodo'],ok:0,why:'El límite que expresa la persona debe respetarse.'},
+      {cat:'🎯 TÚ DECIDES',q:'Una compañera está sola después de que el curso se burló de ella. ¿Cómo puedes apoyarla?',a:['Preguntarle cómo está y ofrecer acompañarla','Decirle que olvide lo ocurrido','Preguntarle delante de todos por qué lloró'],ok:0,why:'Acercarte con respeto y en privado puede ayudarla a sentirse acompañada.'},
+      {cat:'🎯 TÚ DECIDES',q:'Un amigo te pide participar en una broma que humillará a otro compañero. ¿Qué decides?',a:['Aceptar para no perder su amistad','Negarte y proponer otra actividad que no lastime a nadie','Participar, pero sin grabarlo'],ok:1,why:'Puedes poner un límite sin humillar a tu amigo ni sumarte al daño.'},
+      {cat:'🎯 TÚ DECIDES',q:'Escuchas que un estudiante pide que paren de burlarse, pero el grupo continúa. ¿Qué haces?',a:['Le dices que aprenda a soportarlo','Te ríes para evitar problemas','No apoyas la burla y buscas ayuda de un docente'],ok:2,why:'Cuando alguien pide que paren, su límite debe respetarse. Pedir ayuda es una acción segura.'},
+
+      {cat:'⚖️ TUS DERECHOS',q:'Publican una foto de una estudiante sin permiso para humillarla. ¿Qué derechos pueden afectarse?',a:['Ninguno porque fue en Internet','Privacidad, propia imagen y dignidad','Solo el derecho a jugar'],ok:1,why:'La privacidad, la imagen y la dignidad también se protegen en espacios digitales.'},
+      {cat:'⚖️ TUS DERECHOS',q:'Humillan repetidamente a un estudiante por la situación económica de su familia. ¿Qué principio debemos proteger?',a:['Igualdad y no discriminación','El derecho del grupo a burlarse','Ninguno si no hay golpes'],ok:0,why:'Todas las personas merecen respeto e igualdad, sin importar su situación económica.'},
+      {cat:'⚖️ TUS DERECHOS',q:'Amenazan y hostigan a una estudiante dentro y fuera del aula. ¿Qué debe protegerse?',a:['Solo sus notas','Solo su teléfono','Su integridad y derecho a vivir sin violencia'],ok:2,why:'La violencia psicológica y las amenazas afectan la integridad y la seguridad.'},
+      {cat:'⚖️ TUS DERECHOS',q:'Un grupo divulga mensajes personales de un compañero para avergonzarlo. ¿Qué derecho es especialmente relevante?',a:['La privacidad e intimidad','El derecho a reenviar mensajes','Ninguno si el chat era privado'],ok:0,why:'Los mensajes personales no deben difundirse para causar daño.'},
+      {cat:'⚖️ TUS DERECHOS',q:'Una compañera sufre burlas constantes y quiere contarlo. ¿Quién puede ayudar a proteger sus derechos?',a:['Solo sus amistades','Docentes, familia y personas adultas responsables de la escuela','Nadie si ocurre por redes'],ok:1,why:'La escuela y los adultos responsables deben escuchar, proteger y activar los canales de ayuda.'},
+      {cat:'⚖️ TUS DERECHOS',q:'Comparten el número de teléfono de un estudiante para que desconocidos le envíen insultos. ¿Qué derecho puede afectarse?',a:['Su privacidad y seguridad','El derecho de otros a molestarlo','Ninguno porque el número está en un celular'],ok:0,why:'Difundir datos personales para hostigar puede afectar la privacidad y la seguridad.'},
+      {cat:'⚖️ TUS DERECHOS',q:'Se burlan constantemente de una estudiante por su origen o forma de hablar. ¿Qué principio se vulnera?',a:['El derecho a elegir amistades','La igualdad y no discriminación','La libertad de burlarse'],ok:1,why:'Nadie debe recibir humillaciones o trato desigual por su origen o forma de hablar.'},
+      {cat:'⚖️ TUS DERECHOS',q:'Un estudiante denuncia acoso y teme que sus compañeros se enteren. ¿Qué debe cuidarse?',a:['Que todos conozcan los detalles','Que resuelva el problema por sí solo','Su privacidad y una atención respetuosa'],ok:2,why:'Buscar ayuda debe ser seguro y evitar que la persona sea expuesta o humillada nuevamente.'}
+
+    ];
+
+    let round = [], index = 0, points = 0, answered = false;
+    const $ = id => document.getElementById(id);
+
+    // --- Web Audio API Synth Engine (100% Offline & Lightweight) ---
+    let audioCtx = null;
+    let soundEnabled = true;
+    let bgMusicInterval = null;
+    let bgMusicStep = 0;
+
+    const bgChords = [
+      [261.63, 329.63, 392.00, 493.88], // Cmaj7 (C4, E4, G4, B4)
+      [220.00, 261.63, 329.63, 392.00], // Am7 (A3, C4, E4, G4)
+      [174.61, 220.00, 261.63, 329.63], // Fmaj7 (F3, A3, C4, E4)
+      [196.00, 246.94, 293.66, 349.23]  // G7 (G3, B3, D4, F4)
+    ];
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      if (soundEnabled) {
+        startBgMusic();
+      }
+    }
+
+    function playAmbientPad() {
+      if (!soundEnabled || !audioCtx) return;
+      try {
+        const chord = bgChords[bgMusicStep % bgChords.length];
+        bgMusicStep++;
+        
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(350, audioCtx.currentTime);
+        filter.connect(audioCtx.destination);
+
+        chord.forEach(freq => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+          gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.015, audioCtx.currentTime + 1.2);
+          gain.gain.exponentialRampToValueAtTime(0.0005, audioCtx.currentTime + 3.8);
+
+          osc.connect(gain);
+          gain.connect(filter);
+
+          osc.start(audioCtx.currentTime);
+          osc.stop(audioCtx.currentTime + 3.9);
+        });
+      } catch (e) {}
+    }
+
+    function startBgMusic() {
+      if (bgMusicInterval) return;
+      playAmbientPad();
+      bgMusicInterval = setInterval(() => {
+        if (soundEnabled) playAmbientPad();
+      }, 4000);
+    }
+
+    function stopBgMusic() {
+      if (bgMusicInterval) {
+        clearInterval(bgMusicInterval);
+        bgMusicInterval = null;
+      }
+    }
+
+    function playTone(freq, type, duration, delay = 0) {
+      if (!soundEnabled) return;
+      initAudio();
+      setTimeout(() => {
+        try {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }, delay * 1000);
+    }
+
+    function playCorrectSound() {
+      playTone(523.25, 'sine', 0.12, 0);    // Do5 (C5)
+      playTone(659.25, 'sine', 0.15, 0.08); // Mi5 (E5)
+      playTone(783.99, 'sine', 0.25, 0.16); // Sol5 (G5)
+    }
+
+    function playWrongSound() {
+      playTone(311.13, 'triangle', 0.15, 0);   // Mi b4 (Eb4)
+      playTone(261.63, 'triangle', 0.25, 0.12); // Do4 (C4)
+    }
+
+    function playVictorySound() {
+      playTone(523.25, 'sine', 0.12, 0);    // C5
+      playTone(659.25, 'sine', 0.12, 0.09); // E5
+      playTone(783.99, 'sine', 0.12, 0.18); // G5
+      playTone(1046.50, 'sine', 0.45, 0.27); // C6
+    }
+
+    function playClickSound() {
+      playTone(480, 'sine', 0.06, 0);
+    }
+
+    // --- Submenú Navbar Dropdown ---
+    const menuBtn = $('menubtn');
+    const dropdownMenu = $('dropdownmenu');
+
+    if (menuBtn && dropdownMenu) {
+      menuBtn.onclick = (e) => {
+        e.stopPropagation();
+        playClickSound();
+        dropdownMenu.classList.toggle('hidden');
+      };
+
+      document.addEventListener('click', (e) => {
+        if (!dropdownMenu.contains(e.target) && e.target !== menuBtn) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    const soundBtn = $('soundbtn');
+    if (soundBtn) {
+      soundBtn.onclick = () => {
+        if (dropdownMenu) dropdownMenu.classList.add('hidden');
+        initAudio();
+        soundEnabled = !soundEnabled;
+        soundBtn.textContent = soundEnabled ? '🔊 Sonido (Activado)' : '🔇 Silencio (Desactivado)';
+        soundBtn.style.opacity = soundEnabled ? '1' : '0.6';
+        if (soundEnabled) {
+          startBgMusic();
+          playClickSound();
+        } else {
+          stopBgMusic();
+        }
+      };
+    }
+
+    // --- Modal Quiénes Somos / Sobre la App ---
+    const aboutBtn = $('aboutbtn');
+    const aboutModal = $('aboutmodal');
+    const closeAbout = $('closeabout');
+
+    if (aboutBtn && aboutModal && closeAbout) {
+      aboutBtn.onclick = () => {
+        if (dropdownMenu) dropdownMenu.classList.add('hidden');
+        playClickSound();
+        aboutModal.classList.remove('hidden');
+      };
+      closeAbout.onclick = () => {
+        playClickSound();
+        aboutModal.classList.add('hidden');
+      };
+      aboutModal.onclick = (e) => {
+        if (e.target === aboutModal) {
+          playClickSound();
+          aboutModal.classList.add('hidden');
+        }
+      };
+    }
+
+    // --- Temporizador Opcional (15 segundos) ---
+    let timerEnabled = false;
+    let timeLeft = 15;
+    let timerInterval = null;
+
+    function startTimer() {
+      stopTimer();
+      const badge = $('timerbadge');
+      if (!timerEnabled) {
+        if (badge) badge.classList.add('hidden');
+        return;
+      }
+      timeLeft = 15;
+      if (badge) {
+        badge.classList.remove('hidden');
+        badge.textContent = `⏱️ ${timeLeft}s`;
+      }
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        if (badge) badge.textContent = `⏱️ ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          stopTimer();
+          timeOutAnswer();
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function timeOutAnswer() {
+      if (answered) return;
+      answered = true;
+      let q = round[index];
+      playWrongSound();
+      [...$('choices').children].forEach((b, j) => {
+        b.disabled = true;
+        b.classList.add(j === q.ok ? 'correct' : 'dim');
+      });
+      let f = $('feedback');
+      f.replaceChildren();
+      let strong = document.createElement('strong');
+      strong.textContent = '⏱️ ¡Tiempo agotado! (0 puntos)';
+      f.append(strong, document.createTextNode(' ' + q.why));
+      f.classList.remove('hidden');
+      $('progress').style.width = ((index + 1) / 8 * 100) + '%';
+      $('next').textContent = index === 7 ? 'VER RESULTADO 🏆' : 'SIGUIENTE ➜';
+      $('next').classList.remove('hidden');
+    }
+
+    let questionsPerGame = 8;
+
+    const btnMode8 = $('btnmode8');
+    const btnMode4 = $('btnmode4');
+
+    if (btnMode8 && btnMode4) {
+      btnMode8.onclick = () => {
+        playClickSound();
+        questionsPerGame = 8;
+        btnMode8.classList.add('active');
+        btnMode4.classList.remove('active');
+      };
+      btnMode4.onclick = () => {
+        playClickSound();
+        questionsPerGame = 4;
+        btnMode4.classList.add('active');
+        btnMode8.classList.remove('active');
+      };
+    }
+
+    function show(id) {
+      ['home', 'game', 'end'].forEach(x => $(x).classList.toggle('hidden', x !== id));
+      const floatTab = $('floatingmodetab');
+      if (floatTab) {
+        floatTab.classList.toggle('hidden', id !== 'home');
+      }
+    }
+
+    function shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function begin() {
+      playClickSound();
+      const toggle = $('timertoggle');
+      timerEnabled = toggle ? toggle.checked : false;
+      const countPerCat = questionsPerGame === 4 ? 1 : 2;
+      const maxPoints = questionsPerGame * 100;
+      round = ['🔎 DETECTIVE', '📱 ALERTA DIGITAL', '🎯 TÚ DECIDES', '⚖️ TUS DERECHOS'].flatMap(c => shuffle(bank.filter(x => x.cat === c)).slice(0, countPerCat));
+      index = 0;
+      points = 0;
+      $('scoretop').textContent = `⭐ 0 / ${maxPoints}`;
+      show('game');
+      render();
+    }
+
+    function render() {
+      answered = false;
+      let q = round[index];
+      $('stage').textContent = q.cat;
+      $('count').textContent = `Pregunta ${index + 1} / ${questionsPerGame}`;
+      $('progress').style.width = (index / questionsPerGame * 100) + '%';
+      $('question').textContent = q.q;
+      $('feedback').classList.add('hidden');
+      $('next').classList.add('hidden');
+      let box = $('choices');
+      box.replaceChildren();
+      q.a.forEach((v, i) => {
+        let b = document.createElement('button');
+        b.className = 'choice';
+        let label = document.createElement('span');
+        label.textContent = 'ABC'[i];
+        b.append(label, document.createTextNode(v));
+        b.onclick = () => answer(i);
+        box.append(b);
+      });
+      startTimer();
+    }
+
+    function answer(i) {
+      if (answered) return;
+      answered = true;
+      stopTimer();
+      let q = round[index], right = i === q.ok;
+      const maxPoints = questionsPerGame * 100;
+      if (right) {
+        points += 100;
+        playCorrectSound();
+      } else {
+        playWrongSound();
+      }
+      $('scoretop').textContent = `⭐ ${points} / ${maxPoints}`;
+      [...$('choices').children].forEach((b, j) => {
+        b.disabled = true;
+        b.classList.add(j === q.ok ? 'correct' : j === i ? 'wrong' : 'dim');
+      });
+      let f = $('feedback');
+      f.replaceChildren();
+      let strong = document.createElement('strong');
+      strong.textContent = right ? '✅ ¡Bien! +100 puntos' : '💡 Aprendamos juntos';
+      f.append(strong, document.createTextNode(q.why));
+      f.classList.remove('hidden');
+      $('progress').style.width = ((index + 1) / questionsPerGame * 100) + '%';
+      $('next').textContent = index === (questionsPerGame - 1) ? 'VER RESULTADO 🏆' : 'SIGUIENTE ➜';
+      $('next').classList.remove('hidden');
+    }
+
+    function timeOutAnswer() {
+      if (answered) return;
+      answered = true;
+      let q = round[index];
+      const maxPoints = questionsPerGame * 100;
+      playWrongSound();
+      [...$('choices').children].forEach((b, j) => {
+        b.disabled = true;
+        b.classList.add(j === q.ok ? 'correct' : 'dim');
+      });
+      let f = $('feedback');
+      f.replaceChildren();
+      let strong = document.createElement('strong');
+      strong.textContent = '⏱️ ¡Tiempo agotado! (0 puntos)';
+      f.append(strong, document.createTextNode(' ' + q.why));
+      f.classList.remove('hidden');
+      $('progress').style.width = ((index + 1) / questionsPerGame * 100) + '%';
+      $('next').textContent = index === (questionsPerGame - 1) ? 'VER RESULTADO 🏆' : 'SIGUIENTE ➜';
+      $('next').classList.remove('hidden');
+    }
+
+    function launchConfetti() {
+      const canvas = $('confetti');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#f7cf53', '#92ebf4', '#9ef2d0', '#a855f7', '#ec4899', '#ffffff'];
+      let particles = [];
+
+      for (let i = 0; i < 130; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * 0.3 - canvas.height * 0.1,
+          w: Math.random() * 10 + 6,
+          h: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * 3 + 2.5,
+          rot: Math.random() * 360,
+          vr: (Math.random() - 0.5) * 8,
+          opacity: 1
+        });
+      }
+
+      let startTime = Date.now();
+
+      function renderFrame() {
+        let elapsed = Date.now() - startTime;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let active = false;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          if (elapsed > 2500) {
+            p.opacity -= 0.02;
+          }
+          if (p.opacity > 0) {
+            active = true;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rot * Math.PI) / 180);
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          }
+        });
+
+        if (active && elapsed < 4000) {
+          requestAnimationFrame(renderFrame);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      requestAnimationFrame(renderFrame);
+    }
+
+    function advance() {
+      if (!answered) return;
+      stopTimer();
+      if (++index < questionsPerGame) {
+        playClickSound();
+        render();
+        return;
+      }
+      playVictorySound();
+      show('end');
+      const maxPoints = questionsPerGame * 100;
+      $('score').textContent = `${points} / ${maxPoints}`;
+      const pct = (points / maxPoints) * 100;
+      let rank = pct >= 85 ? '🏆 GUARDIÁN CONTRA EL BULLYING' : pct >= 50 ? '🛡️ DEFENSOR' : '🌱 APRENDIZ';
+      $('rank').textContent = rank;
+      $('closing').textContent = pct >= 85 ? '¡Misión cumplida! Puedes reconocer situaciones de acoso y actuar con respeto.' : pct >= 50 ? '¡Buen trabajo! Sigue practicando cómo reconocer el acoso y acompañar a otros.' : 'Cada decisión es una oportunidad para aprender y ayudar. ¡Vuelve a intentarlo!';
+      if (pct >= 50) launchConfetti();
+    }
+
+    $('start').onclick = begin;
+    $('again').onclick = begin;
+    $('next').onclick = advance;
+
+    document.addEventListener('keydown', e => {
+      if ($('game').classList.contains('hidden')) return;
+      if (!answered && ['1', '2', '3', 'a', 'b', 'c'].includes(e.key.toLowerCase())) {
+        let map = { a: 0, b: 1, c: 2, '1': 0, '2': 1, '3': 2 };
+        answer(map[e.key.toLowerCase()]);
+      } else if (answered && e.key === 'Enter') {
+        advance();
+      }
+    });
+  </script>
+</body>
+</html>

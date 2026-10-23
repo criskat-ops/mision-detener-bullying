@@ -1,0 +1,981 @@
+/**
+ * Sistema de Diseño Jurídico Académico / Pergamino Solemne
+ * Feria Universitaria de Interacción Social · Universidad Privada Domingo Savio (UPDS)
+ * Facultad de Ciencias Jurídicas y Sociales · Derecho Constitucional
+ * Regla Estricta: Cero Scroll (100vh / 100dvh pantalla única)
+ */
+
+:root {
+  /* Tipografía */
+  --font-serif: 'Georgia', 'Cambria', 'Times New Roman', serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Paleta Jurídica y Pergamino */
+  --bg-parchment-light: #FBF8F2;
+  --bg-parchment: #F4EDE1;
+  --bg-parchment-aged: #E9DCC9;
+  --bg-card: #FFFEFC;
+  --bg-card-inner: #FAF6EF;
+  --bg-option: #FCF9F3;
+  --bg-option-hover: #F3E9D7;
+
+  /* Identidad Chocolate y Oro Viejo */
+  --chocolate-dark: #1F120A;
+  --chocolate-deep: #2C1A11;
+  --chocolate-mid: #42281A;
+  --gold-primary: #C5A059;
+  --gold-light: #DFC488;
+  --gold-dark: #987532;
+  --border-gold: #C5A059;
+  --border-gold-soft: rgba(197, 160, 89, 0.4);
+  --border-gold-subtle: rgba(197, 160, 89, 0.22);
+
+  /* Texto */
+  --text-main: #241E19;
+  --text-muted: #67574B;
+  --text-light: #8E7D70;
+  --text-on-dark: #FAF6EE;
+
+  /* Estados Jurídicos de Respuesta */
+  --juridico-green-bg: #1B5E20;
+  --juridico-green-border: #2E7D32;
+  --juridico-green-text: #FFFFFF;
+  --juridico-red-bg: #8B1A1A;
+  --juridico-red-border: #B71C1C;
+  --juridico-red-text: #FFFFFF;
+
+  /* Tricolor Boliviano */
+  --bolivia-red: #D52B1E;
+  --bolivia-yellow: #FCD116;
+  --bolivia-green: #007934;
+}
+
+/* ========================================================
+   REINICIO Y RESTRICCIÓN DE PANTALLA ÚNICA (CERO SCROLL)
+   ======================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden; /* CERO SCROLL VERTICAL EN TODA LA VENTANA */
+  font-family: var(--font-sans);
+  color: var(--text-main);
+  background-color: var(--bg-parchment);
+  background-image: 
+    radial-gradient(ellipse at 50% 0%, rgba(255, 254, 250, 0.85) 0%, transparent 65%),
+    radial-gradient(circle at 10% 90%, rgba(197, 160, 89, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 90% 10%, rgba(44, 26, 17, 0.08) 0%, transparent 40%),
+    linear-gradient(135deg, #F8F3EB 0%, #EDE4D4 55%, #E3D3BE 100%);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Envoltorio Principal de Altura Fija */
+.wrap {
+  width: min(1180px, 96vw);
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(6px, 1vh, 12px) clamp(10px, 1.5vw, 20px) clamp(4px, 0.7vh, 8px);
+  overflow: hidden;
+}
+
+/* ========================================================
+   CABECERA INSTITUCIONAL SOLEMNE UPDS (Con Franja Tricolor)
+   ======================================================== */
+.top {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: clamp(4px, 0.7vh, 8px) clamp(10px, 1.4vw, 18px);
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-gold);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(44, 26, 17, 0.07);
+  margin-bottom: clamp(4px, 0.8vh, 10px);
+  position: relative;
+  z-index: 500;
+}
+
+/* Franja tricolor boliviana en el borde inferior */
+.top::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: 20px;
+  right: 20px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg, 
+    var(--bolivia-red) 0%, 
+    var(--bolivia-red) 33.3%, 
+    var(--bolivia-yellow) 33.3%, 
+    var(--bolivia-yellow) 66.6%, 
+    var(--bolivia-green) 66.6%, 
+    var(--bolivia-green) 100%
+  );
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  height: clamp(32px, 4.2vh, 42px);
+  width: auto;
+  max-width: 90px;
+  object-fit: contain;
+  background: #FFFFFF;
+  padding: 3px 6px;
+  border-radius: 7px;
+  border: 1.5px solid var(--border-gold-soft);
+  box-shadow: 0 2px 6px rgba(44, 26, 17, 0.08);
+}
+
+.brand-text {
+  text-align: left;
+}
+
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: clamp(12px, 1.5vh, 16.5px);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--chocolate-deep);
+  line-height: 1.15;
+}
+
+.brand-sub {
+  font-family: var(--font-sans);
+  font-size: clamp(9px, 1.05vh, 11px);
+  font-weight: 700;
+  color: var(--gold-dark);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  padding: clamp(4px, 0.65vh, 7px) clamp(8px, 1.1vw, 14px);
+  border-radius: 100px;
+  font-size: clamp(11.5px, 1.35vh, 13.5px);
+  font-weight: 700;
+  white-space: nowrap;
+  font-family: var(--font-serif);
+}
+
+.score-badge {
+  background: linear-gradient(135deg, var(--chocolate-deep), var(--chocolate-dark));
+  color: var(--gold-light);
+  border: 1.5px solid var(--gold-primary);
+  box-shadow: 0 2px 8px rgba(44, 26, 17, 0.2);
+}
+
+/* ========================================================
+   PANELES PRINCIPALES (Efecto Pergamino y Filete Doble)
+   ======================================================== */
+.panel {
+  flex: 1;
+  min-height: 0; /* IMPRESCINDIBLE PARA PREVENIR OVERFLOW EN FLEX */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  background: var(--bg-card);
+  border: 2px solid var(--border-gold);
+  border-radius: 16px;
+  padding: clamp(10px, 1.8vh, 24px) clamp(14px, 2.8vw, 36px);
+  box-shadow: 
+    0 12px 36px rgba(44, 26, 17, 0.08),
+    inset 0 0 0 3px rgba(197, 160, 89, 0.22),
+    inset 0 0 24px rgba(235, 221, 199, 0.3);
+  text-align: center;
+  position: relative;
+  overflow-y: auto; /* Fallback de contención segura si la ventana es extrema */
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-primary) transparent;
+}
+
+#game.panel {
+  padding: clamp(8px, 1.3vh, 18px) clamp(14px, 2.5vw, 36px);
+  justify-content: space-evenly;
+}
+
+.panel::-webkit-scrollbar {
+  width: 5px;
+}
+.panel::-webkit-scrollbar-thumb {
+  background: var(--gold-primary);
+  border-radius: 10px;
+}
+
+/* ========================================================
+   PANTALLA DE INICIO (#home)
+   ======================================================== */
+.institutional-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(4px, 0.8vh, 8px);
+  margin-bottom: clamp(6px, 1.2vh, 14px);
+}
+
+.upds-hero-logo {
+  height: clamp(52px, 7.5vh, 74px);
+  width: auto;
+  max-width: 230px;
+  object-fit: contain;
+  background: #FFFFFF;
+  padding: 6px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border-gold);
+  box-shadow: 0 6px 20px rgba(44, 26, 17, 0.1);
+  transition: transform 0.25s ease;
+}
+
+.upds-hero-logo:hover {
+  transform: scale(1.03);
+}
+
+.badge-ribbon {
+  font-family: var(--font-serif);
+  font-size: clamp(10px, 1.25vh, 12px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--chocolate-deep);
+  background: rgba(197, 160, 89, 0.18);
+  border: 1px solid var(--border-gold-soft);
+  padding: 3px 14px;
+  border-radius: 100px;
+}
+
+.eyebrow {
+  color: var(--gold-dark);
+  font-family: var(--font-serif);
+  font-size: clamp(11px, 1.5vh, 14px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: clamp(4px, 0.8vh, 8px);
+}
+
+h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 3.6vh, 36px);
+  line-height: 1.15;
+  margin: 0 0 clamp(6px, 1vh, 12px);
+  font-weight: 700;
+  color: var(--chocolate-deep);
+  letter-spacing: -0.01em;
+}
+
+.intro {
+  font-size: clamp(13px, 1.6vh, 16px);
+  line-height: 1.4;
+  max-width: 760px;
+  margin: 0 auto clamp(8px, 1.4vh, 16px);
+  color: var(--text-muted);
+}
+
+.timer-control-wrap {
+  margin: 0 auto clamp(8px, 1.4vh, 18px);
+  display: flex;
+  justify-content: center;
+}
+
+.timer-pill {
+  cursor: pointer;
+  font-size: clamp(12px, 1.45vh, 14px);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(197, 160, 89, 0.12);
+  padding: clamp(6px, 1vh, 9px) clamp(14px, 1.6vw, 22px);
+  border-radius: 100px;
+  border: 1.5px solid var(--border-gold);
+  color: var(--chocolate-deep);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.timer-pill:hover {
+  background: rgba(197, 160, 89, 0.22);
+}
+
+.timer-pill input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--gold-dark);
+  cursor: pointer;
+}
+
+.action-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(4px, 0.8vh, 10px);
+}
+
+.small {
+  font-size: clamp(11px, 1.3vh, 12.5px);
+  color: var(--text-light);
+  margin-top: clamp(6px, 1vh, 12px);
+}
+
+/* ========================================================
+   BOTONES INSTITUCIONALES (Estilo Oro & Chocolate)
+   ======================================================== */
+.button {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  border-radius: 100px;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  letter-spacing: 0.04em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--gold-primary);
+  outline-offset: 3px;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--chocolate-deep) 0%, var(--chocolate-dark) 100%);
+  color: var(--gold-light);
+  border: 1.5px solid var(--gold-primary);
+  padding: clamp(9px, 1.4vh, 14px) clamp(26px, 3vw, 42px);
+  font-size: clamp(14px, 1.75vh, 18px);
+  box-shadow: 0 4px 16px rgba(44, 26, 17, 0.25);
+}
+
+.btn-gold:hover {
+  background: linear-gradient(135deg, var(--chocolate-mid) 0%, var(--chocolate-deep) 100%);
+  border-color: var(--gold-light);
+  box-shadow: 0 6px 22px rgba(197, 160, 89, 0.35);
+  color: #FFFFFF;
+}
+
+/* ========================================================
+   PANTALLA DE JUEGO / PREGUNTAS (#game) - CERO SCROLL
+   ======================================================== */
+.status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(12px, 1.4vh, 14.5px);
+  font-weight: 700;
+  font-family: var(--font-serif);
+  color: var(--chocolate-deep);
+  margin-bottom: clamp(3px, 0.5vh, 6px);
+}
+
+.stage-tag, .count-tag {
+  background: rgba(197, 160, 89, 0.15);
+  border: 1px solid var(--border-gold-soft);
+  padding: 2.5px 11px;
+  border-radius: 100px;
+  letter-spacing: 0.03em;
+}
+
+.timer-badge {
+  background: var(--chocolate-deep);
+  color: var(--gold-light);
+  border: 1.5px solid var(--gold-primary);
+  padding: 2.5px 12px;
+  border-radius: 100px;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(44, 26, 17, 0.2);
+}
+
+.bar {
+  height: clamp(4px, 0.6vh, 6px);
+  background: rgba(197, 160, 89, 0.2);
+  border: 1px solid var(--border-gold-soft);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 0 0 clamp(4px, 0.7vh, 8px);
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-primary), var(--gold-light), var(--gold-primary));
+  transition: width 0.3s ease;
+}
+
+h2#question, #qText, .q-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.24rem, 2.45vh, 1.72rem);
+  line-height: 1.24;
+  margin: 0 0 clamp(5px, 0.9vh, 10px);
+  color: var(--chocolate-dark);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Cuadrícula 2x2 de Opciones con Alta Legibilidad */
+.choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(6px, 1vh, 11px);
+  text-align: left;
+}
+
+.choice, .opt-btn {
+  font: inherit;
+  cursor: pointer;
+  background: var(--bg-option);
+  color: var(--text-main);
+  border: 1.8px solid var(--border-gold-soft);
+  border-radius: 13px;
+  min-height: clamp(46px, 6.6vh, 64px);
+  padding: clamp(5px, 0.8vh, 9px) clamp(10px, 1.2vw, 16px);
+  font-size: clamp(1.02rem, 1.8vh, 1.25rem);
+  font-weight: 600;
+  line-height: 1.22;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(44, 26, 17, 0.05);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.choice:hover, .opt-btn:hover {
+  background: var(--bg-option-hover);
+  border-color: var(--gold-primary);
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 14px rgba(197, 160, 89, 0.25);
+}
+
+.choice span, .opt-btn .opt-badge, .opt-btn span {
+  display: inline-grid;
+  place-items: center;
+  background: linear-gradient(135deg, #1C0F07 0%, #2F1A0F 100%);
+  color: #FFF6E0;
+  border: 1.8px solid var(--gold-primary);
+  border-radius: 9px;
+  min-width: clamp(32px, 4.4vh, 42px);
+  height: clamp(32px, 4.4vh, 42px);
+  margin-right: clamp(8px, 1vw, 13px);
+  font-weight: 900;
+  font-family: var(--font-serif);
+  font-size: clamp(14.5px, 2.1vh, 19px);
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.choice:disabled, .opt-btn:disabled {
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Respuestas Correctas / Erróneas */
+.choice.correct, .opt-btn.correct {
+  background: var(--juridico-green-bg) !important;
+  color: var(--juridico-green-text) !important;
+  border-color: #4CAF50 !important;
+  box-shadow: 0 4px 14px rgba(27, 94, 32, 0.35) !important;
+}
+
+.choice.correct span, .opt-btn.correct .opt-badge, .opt-btn.correct span {
+  background: #FFFFFF !important;
+  color: var(--juridico-green-bg) !important;
+  border-color: #FFFFFF !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+.choice.wrong, .opt-btn.wrong {
+  background: var(--juridico-red-bg) !important;
+  color: var(--juridico-red-text) !important;
+  border-color: #EF5350 !important;
+  box-shadow: 0 4px 14px rgba(139, 26, 26, 0.35) !important;
+}
+
+.choice.wrong span, .opt-btn.wrong .opt-badge, .opt-btn.wrong span {
+  background: #FFFFFF !important;
+  color: var(--juridico-red-bg) !important;
+  border-color: #FFFFFF !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+.choice.dim, .opt-btn.dim {
+  opacity: 0.42;
+  filter: grayscale(25%);
+}
+
+/* Contenedor de Feedback Compacto (Ajustado a Pantalla) */
+.feedback {
+  margin: clamp(4px, 0.65vh, 8px) 0 0;
+  padding: clamp(5px, 0.75vh, 8px) clamp(10px, 1.2vw, 14px);
+  background: #FCFAF6;
+  border: 1.5px solid var(--border-gold-soft);
+  border-left: 5px solid var(--gold-primary);
+  border-radius: 10px;
+  text-align: left;
+  box-shadow: 0 3px 10px rgba(44, 26, 17, 0.05);
+  max-height: clamp(65px, 11vh, 95px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.feedback strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(12.5px, 1.5vh, 15.5px);
+  color: var(--chocolate-deep);
+  margin-bottom: 2px;
+}
+
+.feedback .legal-base {
+  margin-top: 2px;
+  padding: 3px 8px;
+  background: rgba(197, 160, 89, 0.12);
+  border-left: 3px solid var(--gold-dark);
+  border-radius: 4px;
+  font-size: clamp(11px, 1.26vh, 12.8px);
+  color: #2D231B;
+  line-height: 1.26;
+}
+
+.feedback .hint-pedagogica {
+  margin-top: 2px;
+  font-size: clamp(10.5px, 1.15vh, 12px);
+  color: var(--gold-dark);
+  font-style: italic;
+  font-weight: 600;
+}
+
+#next {
+  margin: clamp(4px, 0.65vh, 8px) auto 0;
+  padding: clamp(6px, 0.85vh, 10px) clamp(22px, 2.5vw, 36px);
+  font-size: clamp(13px, 1.5vh, 16px);
+  display: inline-block;
+}
+
+/* ========================================================
+   PANTALLA FINAL (#end) - DIPLOMA DE RECONOCIMIENTO
+   ======================================================== */
+.institutional-badge-sm {
+  margin-bottom: clamp(4px, 0.8vh, 8px);
+}
+
+.upds-hero-logo-sm {
+  height: clamp(44px, 5.5vh, 58px);
+  width: auto;
+  object-fit: contain;
+  background: #FFFFFF;
+  padding: 4px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-gold);
+  box-shadow: 0 4px 12px rgba(44, 26, 17, 0.08);
+}
+
+#rank {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 3.2vh, 32px);
+  color: var(--chocolate-deep);
+  margin: clamp(4px, 0.8vh, 8px) 0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.score {
+  font-size: clamp(36px, 5.8vh, 58px);
+  font-weight: 900;
+  font-family: var(--font-serif);
+  color: var(--gold-dark);
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(197, 160, 89, 0.25);
+}
+
+.motto-box {
+  margin: clamp(6px, 1vh, 12px) auto;
+  padding: clamp(6px, 0.9vh, 10px) clamp(12px, 1.8vw, 22px);
+  background: rgba(197, 160, 89, 0.12);
+  border-left: 3.5px solid var(--gold-primary);
+  border-radius: 8px;
+  font-style: italic;
+  font-size: clamp(11.5px, 1.35vh, 13.5px);
+  color: var(--chocolate-deep);
+  font-family: var(--font-serif);
+  max-width: 680px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Pie de Página */
+.foot {
+  flex-shrink: 0;
+  font-size: clamp(10px, 1.1vh, 12px);
+  color: var(--text-muted);
+  text-align: center;
+  padding-top: clamp(2px, 0.4vh, 5px);
+  font-family: var(--font-serif);
+}
+
+/* Clases de Utilidad */
+.hidden {
+  display: none !important;
+}
+
+/* ========================================================
+   PESTAÑA FLOTANTE DERECHA (Modalidad de Trivia)
+   ======================================================== */
+.floating-mode-tab {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: linear-gradient(180deg, var(--chocolate-deep) 0%, var(--chocolate-dark) 100%);
+  border: 1.5px solid var(--border-gold);
+  border-right: none;
+  border-radius: 14px 0 0 14px;
+  padding: 10px 12px;
+  box-shadow: -4px 8px 24px rgba(44, 26, 17, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.floating-mode-tab h4 {
+  margin: 0 0 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold-light);
+  font-family: var(--font-serif);
+  text-align: center;
+}
+
+.mode-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  color: var(--text-on-dark);
+  padding: 7px 11px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+  white-space: nowrap;
+}
+
+.mode-btn:hover {
+  transform: translateX(-3px);
+  background: rgba(197, 160, 89, 0.2);
+  border-color: var(--gold-light);
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  color: var(--chocolate-dark);
+  font-weight: 800;
+  border-color: var(--gold-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* ========================================================
+   SUBMENÚ DESPLEGABLE NAVBAR
+   ======================================================== */
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-toggle-btn {
+  cursor: pointer;
+  background: rgba(197, 160, 89, 0.15) !important;
+  border: 1.5px solid var(--border-gold) !important;
+  color: var(--chocolate-deep) !important;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.menu-toggle-btn:hover {
+  background: rgba(197, 160, 89, 0.28) !important;
+  transform: translateY(-1px);
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--bg-card);
+  border: 1.5px solid var(--gold-primary);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(44, 26, 17, 0.2);
+  min-width: 230px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 9000;
+  animation: dropdownFade 0.18s ease;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-item {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  color: var(--chocolate-deep);
+  background: transparent;
+  border: 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(197, 160, 89, 0.18);
+  color: var(--gold-dark);
+}
+
+/* ========================================================
+   MODAL DE HONOR (Quiénes Somos / Resolución UPDS)
+   ======================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(31, 18, 10, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 16px;
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--border-gold);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(44, 26, 17, 0.35), inset 0 0 0 3px rgba(197, 160, 89, 0.2);
+  width: min(650px, 94vw);
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: clamp(18px, 2.5vh, 28px);
+  text-align: left;
+  animation: modalFadeIn 0.22s ease;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-primary) transparent;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid var(--border-gold-soft);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+.modal-header h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 2.2vh, 22px);
+  margin: 0;
+  color: var(--chocolate-deep);
+}
+
+.close-btn {
+  background: transparent;
+  border: 0;
+  color: var(--chocolate-deep);
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.close-btn:hover {
+  opacity: 1;
+  color: var(--gold-dark);
+}
+
+.modal-hero-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.modal-logo-img {
+  height: 52px;
+  width: auto;
+  background: #FFFFFF;
+  padding: 4px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-gold-soft);
+  box-shadow: 0 2px 8px rgba(44, 26, 17, 0.08);
+}
+
+.modal-body h3 {
+  font-family: var(--font-serif);
+  color: var(--chocolate-deep);
+  font-size: clamp(15px, 1.8vh, 18px);
+  margin: 14px 0 4px;
+  border-left: 3px solid var(--gold-primary);
+  padding-left: 8px;
+}
+
+.modal-body p {
+  font-size: clamp(13px, 1.5vh, 15px);
+  line-height: 1.45;
+  color: var(--text-muted);
+  margin: 0 0 10px;
+}
+
+.members-grid {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 7px;
+  font-size: 13.5px;
+  color: var(--chocolate-deep);
+}
+
+.members-grid li {
+  background: rgba(197, 160, 89, 0.12);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-gold-soft);
+  font-weight: 600;
+}
+
+.credits-box {
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: rgba(197, 160, 89, 0.15);
+  border-radius: 10px;
+  border: 1.5px solid var(--border-gold);
+  text-align: center;
+  font-size: 13px;
+  font-family: var(--font-serif);
+  color: var(--chocolate-deep);
+}
+
+/* ========================================================
+   RESPONSIVIDAD Y OPTIMIZACIONES PARA PANTALLAS PEQUEÑAS
+   ======================================================== */
+@media (max-width: 768px) {
+  .wrap {
+    padding: 8px;
+  }
+
+  .top {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+
+  .brand-title {
+    font-size: 13px;
+  }
+  .brand-sub {
+    font-size: 9.5px;
+  }
+
+  .panel {
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  .choices {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .choice, .opt-btn {
+    min-height: 44px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .floating-mode-tab {
+    top: auto;
+    bottom: 12px;
+    right: 8px;
+    left: 8px;
+    transform: none;
+    border-radius: 12px;
+    border-right: 1.5px solid var(--border-gold);
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 6px 8px;
+  }
+
+  .floating-mode-tab h4 {
+    display: none;
+  }
+
+  .mode-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}
